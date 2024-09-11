@@ -4,7 +4,7 @@ from main import update_txt_files  # Import the function from your script
 
 app = Flask(__name__)
 
-@app.route("/POST")
+@app.route("/post", methods=['POST'])
 def index():
     print('reach')
     update_txt_files()  # Run the task
