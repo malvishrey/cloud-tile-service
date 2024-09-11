@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    print('reach')
     update_txt_files()  # Run the task
     return "Task completed", 200
 
