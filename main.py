@@ -21,11 +21,11 @@ def generate_tile_service(date, confidence, geojson, asu_snow):
     bucket = client.get_bucket(bucket_name)
     blob_date = bucket.blob('data/ps_daily.txt')
     ps_dates = blob_date.download_as_text()
-    logging.INFO("reached_here after bucket")
+    logger.info(f"reached_here after bucket {ps_dates}")
     current_date = datetime.today().strftime('%Y-%m-%d')
     print(current_date)
     if (current_date in ps_dates):
-        logging.INFO(f"The date {current_date} exists already.")
+        logger.info(f"The date {current_date} exists already.")
         return 'Skipped - date already exists'
     
     if geojson == "":
@@ -40,7 +40,7 @@ def generate_tile_service(date, confidence, geojson, asu_snow):
     
     order_ids = find_base_maps(current_date,confidence="75",temp_path=temp_geojson_path)
     if(len(order_ids)<len(gdf)//2):
-        logging.INFO(f"Skipping due to less coverage.")
+        logger.info(f"Skipping due to less coverage.")
         return 'Skipped - less coverage'
     
     download_path = 'raw_planet_maps/'
