@@ -2,3 +2,4 @@ google-cloud-storage
 pandas
 Flask
 geopandas
+google-cloud-secret-manager

@@ -2,9 +2,18 @@ import subprocess
 import re
 from download_planet import download
 import logging
+from google.cloud import secretmanager
+import os
+
+secret_id = 'planet-api-key'
+client = secretmanager.SecretManagerServiceClient()
+name = f"projects/projectps/secrets/{secret_id}/versions/latest"
+response = client.access_secret_version(name=name)
+PL_API_KEY = response.payload.data.decode("UTF-8")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 def run_command_and_extract_order_id(command):
     # Run the command and capture its output
