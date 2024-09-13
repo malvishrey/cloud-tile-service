@@ -39,14 +39,15 @@ def generate_tile_service(date, confidence, geojson, asu_snow):
     gdf = gpd.read_file('temp.geojson')
     
     order_ids = find_base_maps(current_date,confidence="75",temp_path=temp_geojson_path)
+    logger.info(f"order list {order_ids}")
     if(len(order_ids)<len(gdf)//2):
         logger.info(f"Skipping due to less coverage.")
         return 'Skipped - less coverage'
     
     download_path = 'raw_planet_maps/'
-    result = subprocess.run("pip install planet -U", shell=True, capture_output=True, text=True)
+    result = subprocess.run("pip install planet -U", check=True, text=True, shell=False)
     download_and_extract_base_maps(order_ids,download_path)
-    result = subprocess.run("pip install planet==1.5.2", shell=True, capture_output=True, text=True)
+    result = subprocess.run("pip install planet==1.5.2", check=True, text=True, shell=False)
 
     out_path = "".join(current_date.split('-'))
     print('out_path',out_path)
