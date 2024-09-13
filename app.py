@@ -28,7 +28,7 @@ def index():
         return jsonify({"message": msg}), 200
 
     except Exception as e:
-        logger.error(f"Error processing request: {e}")
+        logger.error(f"Error processing request",exc_info=True)
         return jsonify({"error": "Failed to process request"}), 400
 
 if __name__ == "__main__":
