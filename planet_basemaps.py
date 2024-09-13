@@ -21,6 +21,7 @@ def run_command_and_extract_order_id(command):
     # print(result.stdout)
 
     # Extract the order ID using a regular expression
+    logger.info(f"{result.stdout}")
     order_ids = re.findall(r'Order ID ([\w-]+)', result.stdout)
     return list(set(order_ids))
 
