@@ -1,19 +1,20 @@
 # Use the official Ubuntu as a base image
-FROM ubuntu:22.04 as base
-
+FROM ghcr.io/osgeo/gdal:ubuntu-small-3.9.0
 # Set the working directory in the container
 WORKDIR /app
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apt-get update && apt-get install -y python3-pip
 
-RUN apt-get install -y libgdal-dev
+RUN  rm /usr/lib/python3.12/EXTERNALLY-MANAGED
 
-RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
+# # RUN apt-get install -y libgdal-dev
 
-RUN export C_INCLUDE_PATH=/usr/include/gdal
+# # RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
 
-RUN pip install GDAL==3.4.1
+# # RUN export C_INCLUDE_PATH=/usr/include/gdal
+
+# RUN pip install GDAL==3.4.1
 
 # Copy the current directory contents into the container at /app
 COPY . /app

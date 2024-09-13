@@ -3,4 +3,4 @@ pandas
 Flask
 geopandas
 google-cloud-secret-manager
-gdal2tiles
+# gdal2tiles
