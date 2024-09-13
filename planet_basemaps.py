@@ -1,14 +1,19 @@
 import subprocess
 import re
 from download_planet import download
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def run_command_and_extract_order_id(command):
     # Run the command and capture its output
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     
     # Check if the command ran successfully
     if result.returncode != 0:
-        print(f"Command failed with return code {result.returncode}")
-        print("Error:", result.stderr)
+        logger.info(f"Command failed with return code {result.returncode}")
+        logger.info(f"Error:{result.stderr}")
         return None
 
     # Print the command output (for debugging purposes)
