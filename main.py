@@ -45,9 +45,9 @@ def generate_tile_service(date, confidence, geojson, asu_snow):
         return 'Skipped - less coverage'
     
     download_path = 'raw_planet_maps/'
-    result = subprocess.run("pip install planet -U", check=True, text=True, shell=False)
+    result = subprocess.run("pip install planet -U", check=True, text=True, shell=True)
     download_and_extract_base_maps(order_ids,download_path)
-    result = subprocess.run("pip install planet==1.5.2", check=True, text=True, shell=False)
+    result = subprocess.run("pip install planet==1.5.2", check=True, text=True, shell=True)
 
     out_path = "".join(current_date.split('-'))
     print('out_path',out_path)
