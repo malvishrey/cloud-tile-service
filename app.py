@@ -13,17 +13,17 @@ logger = logging.getLogger(__name__)
 def index():
     try:
         # Extract data from the request
-        data = request.json
-        date = data.get('date')
-        confidence = data.get('confidence')
-        geojson = data.get('geojson')
-        asu_snow = data.get('asu_snow')
+        # data = request.json
+        # date = data.get('date')
+        # confidence = data.get('confidence')
+        # geojson = data.get('geojson')
+        # asu_snow = data.get('asu_snow')
 
-        # Log received data
-        logger.info(f"Received data: date={date}, confidence={confidence}, geojson={geojson}, asu_snow={asu_snow}")
+        # # Log received data
+        # logger.info(f"Received data: date={date}, confidence={confidence}, geojson={geojson}, asu_snow={asu_snow}")
 
         # Call your task or function with these arguments
-        msg = generate_tile_service(date, confidence, geojson, asu_snow)
+        msg = generate_tile_service("", "", "", "")
 
         return jsonify({"message": msg}), 200
 
