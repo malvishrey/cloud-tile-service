@@ -1,21 +1,75 @@
 from google.cloud import storage
 import pandas as pd
+from datetime import datetime
+import logging
+import json
+import os
+from planet_basemaps import find_base_maps, download_and_extract_base_maps
+from tile_generation import generate_tiles
+import geopandas as gpd
+import subprocess
+import shutil
 
-def update_txt_files():
-    """Updates text files in GCS bucket."""
-    # bucket_name = "your-bucket-name"
-    # file_name = "your-file.txt"
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-    # client = storage.Client()
-    # bucket = client.get_bucket(bucket_name)
-    # blob = bucket.blob(file_name)
+#env tile-service-gcp
+def generate_tile_service(date, confidence, geojson, asu_snow):
 
-    # data = pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})
-    # new_content = data.to_csv(index=False)
-    print('triggered sample file successfully')
+    client = storage.Client()
+    bucket_name = 'shrey-snowviz-platform'
+    bucket = client.get_bucket(bucket_name)
+    blob_date = bucket.blob('data/ps_daily.txt')
+    ps_dates = blob_date.download_as_text()
 
-    # blob.upload_from_string(new_content)
-    # print(f"Updated {file_name} in bucket {bucket_name}")
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    print(current_date)
+    if (current_date in ps_dates):
+        logging.INFO(f"The date {current_date} exists already.")
+        return 'Skipped - date already exists'
+    
+    if geojson == "":
+        geojson = 'data/svr_quad_13.geojson'
 
+    blob = bucket.blob(geojson)
+    temp = blob.download_as_text()
+    temp_geojson_path = 'temp.geojson'
+    with open(temp_geojson_path, 'w', encoding='utf-8') as file:
+        file.write(temp)
+    gdf = gpd.read_file('temp.geojson')
+    
+    order_ids = find_base_maps(current_date,confidence="75",temp_path=temp_geojson_path)
+    if(len(order_ids)<len(gdf)//2):
+        logging.INFO(f"Skipping due to less coverage.")
+        return 'Skipped - less coverage'
+    
+    download_path = 'raw_planet_maps/'
+    result = subprocess.run("pip install planet -U", shell=True, capture_output=True, text=True)
+    download_and_extract_base_maps(order_ids,download_path)
+    result = subprocess.run("pip install planet==1.5.2", shell=True, capture_output=True, text=True)
+
+    out_path = "".join(current_date.split('-'))
+    print('out_path',out_path)
+    generate_tiles(download_path,out_path)
+    if(os.path.exists(out_path)):
+        command = [
+            "gsutil",
+            "-m", "cp",
+            "-r",
+            out_path,
+            f"gs://{bucket_name}/data/planet_daily"
+        ]
+        result = subprocess.run(command, check=True, text=True)
+        updated_content = ps_dates + f"\n{current_date}"
+        blob_date.upload_from_string(updated_content)
+    else:
+        return 'Skipped - problem with tile generation'
+
+    os.remove(temp_geojson_path)
+    shutil.rmtree(download_path)
+    shutil.rmtree(out_path)
+
+    return 'Tiles generated successfully'
 if __name__ == "__main__":
-    update_txt_files()
+    generate_tile_service("", "", "", "")
+
