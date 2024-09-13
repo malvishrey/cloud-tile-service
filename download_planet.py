@@ -3,6 +3,10 @@ import zipfile
 import os
 import shutil
 from datetime import datetime
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def run_command(command):
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -10,6 +14,7 @@ def run_command(command):
         print(f"Command failed with return code {result.returncode}")
         print("Error:", result.stderr)
         return None
+    logger.info(f"{result.stdout}")
     return result.stdout
 
 def unzip_files(zip_directory, extract_to):

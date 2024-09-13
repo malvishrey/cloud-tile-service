@@ -45,7 +45,7 @@ def generate_tiles(basemap_path,out_path_new):
         out_path_new                 # Output directory
     ]
 
-    subprocess.run(command, check=True, text=True, shell=False)
+    subprocess.run(command, check=True, text=True, shell=True)
 
     os.remove('temp.tif')
     os.remove('temp1.tif')
