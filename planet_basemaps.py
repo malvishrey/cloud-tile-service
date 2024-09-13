@@ -5,11 +5,11 @@ import logging
 from google.cloud import secretmanager
 import os
 
-secret_id = 'planet-api-key'
-client = secretmanager.SecretManagerServiceClient()
-name = f"projects/projectps/secrets/{secret_id}/versions/latest"
-response = client.access_secret_version(name=name)
-PL_API_KEY = response.payload.data.decode("UTF-8")
+# secret_id = 'planet-api-key'
+# client = secretmanager.SecretManagerServiceClient()
+# name = f"projects/projectps/secrets/{secret_id}/versions/latest"
+# response = client.access_secret_version(name=name)
+# PL_API_KEY = response.payload.data.decode("UTF-8")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
