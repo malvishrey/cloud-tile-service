@@ -21,7 +21,7 @@ def generate_tile_service(date, confidence, geojson, asu_snow):
     bucket = client.get_bucket(bucket_name)
     blob_date = bucket.blob('data/ps_daily.txt')
     ps_dates = blob_date.download_as_text()
-
+    logging.INFO("reached_here after bucket")
     current_date = datetime.today().strftime('%Y-%m-%d')
     print(current_date)
     if (current_date in ps_dates):
