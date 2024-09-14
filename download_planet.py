@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 def run_command(command):
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"Command failed with return code {result.returncode}")
-        print("Error:", result.stderr)
+        logger.info(f"Command failed with return code {result.returncode}")
+        logger.info(f"Error: {result.stderr}")
         return None
     logger.info(f"now here {result.stdout}")
     return result.stdout
