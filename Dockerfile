@@ -28,6 +28,9 @@ RUN pip install .
 
 WORKDIR /app
 
+RUN echo "{\"key\": \"${PL_API_KEY}\"}" > ~/.planet.json \
+    && chmod 600 ~/.planet.json
+
 RUN pip install click==8.0.4
 
 # Expose the port that the application will listen on (not necessary for background tasks)
