@@ -14,7 +14,7 @@ def run_command(command):
         print(f"Command failed with return code {result.returncode}")
         print("Error:", result.stderr)
         return None
-    logger.info(f"{result.stdout}")
+    logger.info(f"now here {result.stdout}")
     return result.stdout
 
 def unzip_files(zip_directory, extract_to):
@@ -43,10 +43,11 @@ def find_and_move_tif_files(base_directory, target_directory):
 
 def download(order_id,ps_path):
     # Run the command to download the order
+    logger.info("reached inside download")
     os.makedirs('svr_data', exist_ok=True)
     download_command = f"planet orders wait --max-attempts 0 {order_id}  && planet orders download {order_id} --directory svr_data"
     run_command(download_command)
-
+    logger.info("reached after planet orders wait command")
     # Create directories
     extract_to = 'svr_data_extracted'
     os.makedirs(extract_to, exist_ok=True)

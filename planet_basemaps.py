@@ -48,6 +48,7 @@ def find_base_maps(date,confidence,temp_path):
     return order_id
 
 def download_and_extract_base_maps(order_ids,download_path):
+    logger.info(f"reached here {order_ids}")
     for x in order_ids:
         download(x,download_path)
     return
