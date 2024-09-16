@@ -28,7 +28,6 @@ RUN pip install .
 
 WORKDIR /app
 
-ENV PL_API_KEY=PLAK167d2e657cfb45bc816f8a79c651aee8
 
 RUN echo "{\"key\": \"${PL_API_KEY}\"}" > ~/.planet.json \
     && chmod 600 ~/.planet.json
@@ -39,4 +38,4 @@ RUN pip install click==8.0.4
 EXPOSE 8080
 
 # Run the Python script
-CMD ["python3", "app.py"]
+CMD ["python3", "main.py"]
